@@ -37,11 +37,12 @@
         private static $has_many = [];
 
         private static $many_many = [
-            'Riders'    => RiderObject::class
+            'Entrants'  => RiderObject::class,
+            'Results'   => RiderObject::class
         ];
 
         private static $many_many_extraFields = [
-            'Riders'    => [
+            'Results'    => [
                 'Position' => 'Int'
             ]
         ];
@@ -50,7 +51,7 @@
             $fields = parent::getCMSFields();
 
             $fields->removeFieldsFromTab('Root.Main', ['URLSlug']);
-            $fields->removeFieldFromTab('Root.Riders', 'Riders');
+            $fields->removeFieldFromTab('Root.Results', 'Results');
 
             $fields->addFieldsToTab('Root.Main', [
                 TextField::create('Title', 'Title'),
@@ -71,7 +72,7 @@
                 $ridersConf->addComponent(new GridFieldAddExistingSearchButton());
                 $ridersConf->addComponent(new GridFieldOrderableRows('Position'));
 
-                $fields->addFieldToTab('Root.Riders', GridField::create('Riders', 'Riders', $this->Riders(), $ridersConf)->setDescription('After race is completed, order of riders reflects their finishing position in the race.'));
+                $fields->addFieldToTab('Root.Results', GridField::create('Results', 'Race Results', $this->Results(), $ridersConf));
             } else {
                 $fields->addFieldToTab('Root.Riders', LiteralField::create('RidersNotice', '<h3>Please save the race before adding riders.</h3>'));
             }

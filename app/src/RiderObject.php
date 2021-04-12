@@ -10,6 +10,7 @@
         private static $plural_name = 'Riders';
 
         private static $db = [
+            'Title'         => 'Varchar',
             'FirstName'     => 'Varchar',
             'Surname'       => 'Varchar',
             'Grading'       => 'Varchar',
@@ -22,7 +23,7 @@
         private static $has_many = [];
 
         private static $belongs_many_many = [
-            'Races'         => RaceObject::class
+            'Races'   => RaceObject::class,
         ];
 
         private static $summary_fields = [
@@ -34,7 +35,7 @@
         public function getCMSFields() {
             $fields = parent::getCMSFields();
 
-            //$fields->removeFieldsFromTab('Root.Main', []);
+            $fields->removeFieldsFromTab('Root.Main', ['Title']);
 
             $fields->addFieldsToTab('Root.Main', [
                 TextField::create('FirstName', 'First Name'),
@@ -47,7 +48,10 @@
             return $fields;
         }
 
-        public function getTitle() {
-            return $this->FirstName . ' ' . $this->Surname;
+        public function onBeforeWrite()
+        {
+            $this->Title = $this->FirstName . ' ' . $this->Surname;
+
+            parent::onBeforeWrite();
         }
     }
